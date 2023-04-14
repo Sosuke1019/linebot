@@ -9,3 +9,6 @@ linebotをactiveにする手順
  2. ターミナルでflask run --reload --port 8080を実行する
  3. 別のターミナルでngrok http 8080を実行し、ngrokを起動してサーバーを外部公開する
  4. LINE DeveloperのWebhook URLにForwardingと記載の行のhttpsで始まる側のURLをコピーする
+
+ 2023年4月14日の疑問
+ main.pyのappとはどれを指す? -> app.pyファイルの app = Flask(__name__) の "app"を指している
