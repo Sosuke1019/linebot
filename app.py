@@ -1,16 +1,3 @@
-#.gitignoreでバージョン管理から除外する(アクセストークンやチャネルシークレットは、個人情報や重要な情報を含むため、公開された場所に書き込んだり、他人に知られたりしないように注意する必要がある。.envファイルは公開されないようにするために、.gitignoreなどでバージョン管理システムから除外することが一般的。)
-#毎回、ngrokのエンドポイントが変わる(ngrokは起動するたびに異なるエンドポイントを発行するため、一度終了したのちに再度起動した場合はLINE DevelopersのWebhookURLもあわせて修正する必要がある)
-
-# やること
-# 面接官としてどんな感じでやっていくかをプロンプトで決めておく。(sosuke)
-# ユーザーに情報を入力してもらう(sosuke)
-
-# linebotをactiveにする手順
-# 1. source venv/bin/activate で仮想環境をactiveにする
-# 2. ターミナルでflask run --reload --port 8080を実行する
-# 3. 別のターミナルでngrok http 8080を実行し、ngrokを起動してサーバーを外部公開する
-# 4. LINE DeveloperのWebhook URLにForwardingと記載の行のhttpsで始まる側のURLをコピーする
-
 from flask import Flask, request, abort
 from dotenv import load_dotenv
 

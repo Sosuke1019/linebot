@@ -1,0 +1,11 @@
+毎回、ngrokのエンドポイントが変わる(ngrokは起動するたびに異なるエンドポイントを発行するため、一度終了したのちに再度起動した場合はLINE DevelopersのWebhookURLもあわせて修正する必要がある)
+
+やること
+ 面接官としてどんな感じでやっていくかをプロンプトで決めておく
+ ユーザーに情報を入力してもらう
+
+linebotをactiveにする手順
+ 1. source venv/bin/activate で仮想環境をactiveにする
+ 2. ターミナルでflask run --reload --port 8080を実行する
+ 3. 別のターミナルでngrok http 8080を実行し、ngrokを起動してサーバーを外部公開する
+ 4. LINE DeveloperのWebhook URLにForwardingと記載の行のhttpsで始まる側のURLをコピーする
