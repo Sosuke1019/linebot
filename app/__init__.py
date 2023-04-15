@@ -58,7 +58,7 @@ def handle_message(event: MessageEvent) -> None:
         gpt_client = ChatGPTClient(model=Model.GPT35TURBO)
 
     # system_message = Message(role=Role.SYSTEM, content="あなたはドラゴンボールの孫悟空です。悟空の口調で回答してください。第一人称はオラです。")
-    system_message = Message(role=Role.SYSTEM, content="あなたは新卒採用を行う面接官です。あなたは日本のIT業界に所属しています。性別は女性です。1回返答を受けたら、返す質問は必ず一つにしてください。")
+    system_message = Message(role=Role.SYSTEM, content="あなたは新卒採用を行う面接官です。あなたは日本のIT業界に所属しています。1回返答を受けたら、返す質問は必ず一つにしてください。")
     gpt_client.add_message(system_message)
 
     
@@ -78,8 +78,10 @@ def handle_message(event: MessageEvent) -> None:
         ]
         line_bot_api.reply_message(event.reply_token, message_list)
 
-
     if text_message.text in {"男性", "女性"}:
+        user_profile = text_message.text + "として振る舞ってください。"
+        system_message = Message(role=Role.SYSTEM, content= user_profile)
+        gpt_client.add_message(system_message)
         line_bot_api.reply_message(
         event.reply_token, TextSendMessage(text="②プロフィール(例：名前:竹田花子, 性別:女性, 学年:3年生, 学部:情報学部, 志望企業:Google)の入力を行ってください。")
         )

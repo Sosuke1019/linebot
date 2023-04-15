@@ -7,6 +7,7 @@
 出来たら
 ・ 毎回、ngrokのエンドポイントが変わる(ngrokは起動するたびに異なるエンドポイントを発行するため、
 　 一度終了したのちに再度起動した場合はLINE DevelopersのWebhookURLもあわせて修正する必要がある)
+・女性として振る舞ってもらう
 
 linebotをactiveにする手順
  1. source venv/bin/activate で仮想環境をactiveにする
