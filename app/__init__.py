@@ -6,7 +6,7 @@ from flask import Flask, request, abort
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, Source, TextMessage, TextSendMessage
+from linebot.models import MessageEvent, Source, TextMessage, TextSendMessage, TemplateSendMessage
 
 from .gpt.client import ChatGPTClient
 from .gpt.constants import Model, Role
@@ -56,10 +56,40 @@ def handle_message(event: MessageEvent) -> None:
 
     if (gpt_client := chatgpt_instance_map.get(user_id)) is None:
         gpt_client = ChatGPTClient(model=Model.GPT35TURBO)
+
+    # system_message = Message(role=Role.SYSTEM, content="あなたはドラゴンボールの孫悟空です。悟空の口調で回答してください。第一人称はオラです。")
+    system_message = Message(role=Role.SYSTEM, content="あなたは新卒採用を行う面接官です。あなたは日本のIT業界に所属しています。性別は女性です。1回返答を受けたら、返す質問は必ず一つにしてください。")
+    gpt_client.add_message(system_message)
+
     
+    if text_message.text == "面接練習する":
+        template = {
+            "type": "confirm",
+            "text": "①面接官の性別",
+            "actions": [
+                {"type": "message", "label": "男性", "text": "男性"},
+                {"type": "message", "label": "女性", "text": "女性"},
+            ],
+        }
+        message = {"type": "template", "altText": "代替テキスト", "template": template}
+        message_list = [
+            TextSendMessage(text="ありがとうございます! 面接に必要となる情報を教えてください!①面接官の性別②あなたのプロフィール)"),
+            TemplateSendMessage.new_from_json_dict(message),
+        ]
+        line_bot_api.reply_message(event.reply_token, message_list)
+
+
+    if text_message.text in {"男性", "女性"}:
+        line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text="②プロフィール(例：名前:竹田花子, 性別:女性, 学年:3年生, 学部:情報学部, 志望企業:Google)の入力を行ってください。")
+        )
+        return
+
+
     gpt_client.add_message(
         message=Message(role=Role.USER, content=text_message.text)
     )
+
     res = gpt_client.create()
     chatgpt_instance_map[user_id] = gpt_client
 

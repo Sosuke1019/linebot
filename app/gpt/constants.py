@@ -5,6 +5,5 @@ class Role(Enum):
     USER = "user"
     ASSISTANT = "assistant"
 
-
 class Model(Enum):
     GPT35TURBO = "gpt-3.5-turbo"
