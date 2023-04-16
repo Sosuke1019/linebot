@@ -3,9 +3,11 @@ from typing import Dict
 
 from dotenv import load_dotenv
 from flask import Flask, request, abort
+import schedule
+import datetime
 
 from linebot import LineBotApi, WebhookHandler
-from linebot.exceptions import InvalidSignatureError
+from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, Source, TextMessage, TextSendMessage, TemplateSendMessage
 
 from .gpt.client import ChatGPTClient
@@ -19,7 +21,7 @@ load_dotenv(".env", verbose=True)
 app = Flask(__name__)
 
 
-#環境変数取得
+# 環境変数取得
 CHANNEL_ACCESS_TOKEN = os.getenv("CHANNEL_ACCESS_TOKEN")
 CHANNEL_SECRET = os.getenv("CHANNEL_SECRET")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -28,6 +30,13 @@ line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 
 chatgpt_instance_map: Dict[str, ChatGPTClient] = {}
+
+
+# 通知を送る関数
+def send_message():
+    message = TextSendMessage(text="面接練習を行いたい場合は、「面接練習する」と送信してください。")
+    # メッセージを送信
+    line_bot_api.broadcast(message)
 
 
 @app.route("/callback", methods=['POST'])
@@ -86,7 +95,6 @@ def handle_message(event: MessageEvent) -> None:
         event.reply_token, TextSendMessage(text="②プロフィール(例：名前:竹田花子, 性別:女性, 学年:3年生, 学部:情報学部, 志望企業:Google)の入力を行ってください。")
         )
         return
-
 
     gpt_client.add_message(
         message=Message(role=Role.USER, content=text_message.text)

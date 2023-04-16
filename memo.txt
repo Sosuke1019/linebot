@@ -8,6 +8,7 @@
 ・ 毎回、ngrokのエンドポイントが変わる(ngrokは起動するたびに異なるエンドポイントを発行するため、
 　 一度終了したのちに再度起動した場合はLINE DevelopersのWebhookURLもあわせて修正する必要がある)
 ・女性として振る舞ってもらう
+・一定時間応答がなければ、linebotが「面接練習を行いたい場合は、「面接開始」と送信してください。」と送信する。
 
 linebotをactiveにする手順
  1. source venv/bin/activate で仮想環境をactiveにする
